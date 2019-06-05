@@ -17,25 +17,38 @@ def generate_key(salt):
     password = salt.join((''.join(
         SystemRandom().choice(ascii_letters + digits + punctuation) for x in range(SystemRandom().randint(40, 160))))
                          for x in range(SystemRandom().randint(80, 120)))
-    print('password ', password)
-    # update progress
+    # print('password ', password)
+    update(0.3)
     time.sleep(0.4)
-    # update progress
+    update(0.6)
     time.sleep(0.2)
-    # update again
+    update(1)
     print()
     print('\nGenerating keys')
-    # update
+    update(0.3)
     hasher = SHA256.new(password.encode('utf-8'))
-    print("Hasher ", hasher)
+    # print("Hasher ", hasher)
     time.sleep(0.6)
-    # update
+    update(0.5)
     time.sleep(0.6)
-    # update
+    update(1)
     print()
     print()
     return hasher.digest()
 
+
+def update(progress):
+    barLenght = 23
+    status = ""
+    if isinstance(progress, int):
+        progress = float(progress)
+    if progress >= 1:
+        progress = 1
+        status = "COMPLETE"
+    block = int(round(barLenght*progress))
+    loading = "\r{0}\t\t{1}".format("#"*block + " " * (barLenght - block), status)
+    sys.stdout.write(loading)
+    sys.stdout.flush()
 
 def main():
     subprocess.call('clear')
