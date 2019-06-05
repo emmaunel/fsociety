@@ -138,6 +138,9 @@ def main():
             encrypt(START, file, key)
         except:
             pass
+    print("Done.")
+    # TODO
+    print("Print logo")
     del key
     exit(0)
 
