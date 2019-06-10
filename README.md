@@ -14,3 +14,4 @@ generated key.
 
 # TODO
 - [ ] Add an image
+- [ ] Save the key so I can reverse the encryption
